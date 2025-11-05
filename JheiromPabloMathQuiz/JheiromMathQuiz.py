@@ -15,7 +15,7 @@ class MathsQuiz:
         self.selected_difficulty_button = None
         self.selected_operation_button = None
 
-        # === Video Background ===
+        # === Video Background (JheiromMP4 not GIF)===
         self.video_label = tk.Label(self.root)
         self.video_label.pack(fill="both", expand=True)
         self.video_player = tkvideo("JheiromPabloMathQuiz/JheiromMathGIF.mp4", self.video_label, loop=1, size=(600, 450))
