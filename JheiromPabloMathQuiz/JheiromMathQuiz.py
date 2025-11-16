@@ -12,8 +12,8 @@ class MathsQuiz:
         self.root.geometry("600x450")
         self.root.resizable(False, False)
 
-        # === App Icon (converts JPG to PNG at runtime if needed) ===
-        # Developer provided image path inside container: /mnt/data/Jheirom’s Math quiz.jpg
+        # App Icon (converts JPG to PNG at runtime if needed) 
+     
    
         try:
             src_jpg = "/mnt/data/Jheirom’s Math quiz.jpg"
@@ -476,7 +476,7 @@ class MathsQuiz:
         elif self.score >= 50: return "D"
         else: return "F"
 
-# ================== Run App ==================
+# ==================  to Run App ==================
 if __name__ == "__main__":
     root = tk.Tk()
     app = MathsQuiz(root)
