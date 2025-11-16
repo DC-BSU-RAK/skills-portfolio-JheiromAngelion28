@@ -14,7 +14,7 @@ class MathsQuiz:
 
         # === App Icon (converts JPG to PNG at runtime if needed) ===
         # Developer provided image path inside container: /mnt/data/Jheirom’s Math quiz.jpg
-        # We'll create math_quiz_icon.png next to the script if not present
+   
         try:
             src_jpg = "/mnt/data/Jheirom’s Math quiz.jpg"
             icon_png = "JheiromPabloMathQuiz/Jheirom’s Math quiz.png"
