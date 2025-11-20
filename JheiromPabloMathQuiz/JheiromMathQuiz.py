@@ -48,7 +48,7 @@ class MathsQuiz:
         self.video_label = tk.Label(self.root)
         self.video_label.pack(fill="both", expand=True)
         try:
-            video_path = "JheiromPabloMathQuiz/JheiromMathGIF.mp4"
+            video_path = "JheiromPabloMathQuiz/JheiromMathGIF (1) (1).mp4"
             if os.path.exists(video_path):
                 self.video_player = tkvideo(video_path, self.video_label, loop=1, size=(600, 450))
                 self.video_player.play()
