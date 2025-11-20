@@ -96,7 +96,7 @@ class JokeApp:
     # Load jokes from randomJokex.txt
     # ------------------------------------
     def load_jokes(self):
-        path = "randomJokex.txt"  # same folder as script
+        path = "JheiromPabloAlexaTellMeAJoke/randomJokes.txt"  # same folder as script
         jokes = []
 
         with open(path, "r", encoding="utf-8") as f:
