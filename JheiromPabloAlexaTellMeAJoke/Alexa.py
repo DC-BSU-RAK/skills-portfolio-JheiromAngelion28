@@ -1,176 +1,304 @@
-import tkinter as tk
-from tkinter import *
-import random
+"""
+Improved Alexa Joke Teller (Fixed for customtkinter)
+---------------------------------------------------
+Requirements:
+    pip install customtkinter pillow
+Run:
+    python Alexa.py
+"""
+
 import os
-import time
+import random
+import customtkinter as ctk
+from PIL import Image, ImageTk  # kept in case you want to add icons later
 
-class JokeApp:
-    def __init__(self, root):
-        self.root = root
-        self.root.title("Alexa Joke Teller")
-        self.root.geometry("900x550")
-        self.root.resizable(False, False)
+# ----------------------------
+# Configuration
+# ----------------------------
+WINDOW_WIDTH = 900
+WINDOW_HEIGHT = 560
+JOKES_PATH = os.path.join(os.path.dirname(__file__), 'randomJokes.txt')
 
-        # ---------------------------
-        # Gradient Background Canvas
-        # ---------------------------
-        self.canvas = tk.Canvas(root, width=900, height=550, highlightthickness=0)
-        self.canvas.pack(fill="both", expand=True)
+# ----------------------------
+# Load jokes
+# ----------------------------
+def load_jokes(path=JOKES_PATH):
+    jokes = []
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                if '?' in line:
+                    setup, punch = line.split('?', 1)
+                    jokes.append((setup.strip() + '?', punch.strip()))
+                else:
+                    jokes.append((line, ""))
+    except Exception:
+        jokes = [
+            ("Why don't scientists trust atoms?", "Because they make up everything."),
+            ("What do you call fake spaghetti?", "An impasta."),
+            ("Why did the scarecrow win an award?", "Because he was outstanding in his field."),
+        ]
 
-        self.draw_gradient("#5728ff", "#3f0fae")
+    if not jokes:
+        jokes = [("No jokes found.", "Add jokes to randomJokes.txt.")]
 
-        # Main container frame (centered)
-        self.main_frame = Frame(root, bg="", highlightthickness=0)
-        self.main_frame.place(relx=0.5, rely=0.5, anchor=CENTER)
+    return jokes
 
-        # Load jokes
-        self.jokes = self.load_jokes()
 
-        # ---------------------------
-        # Modern Rounded Card Background
-        # ---------------------------
-        self.card = Frame(self.main_frame, bg="#6b6b6b", bd=0)
-        self.card.pack(pady=25)
+# ----------------------------
+# Joke App Class
+# ----------------------------
+class ImprovedJokeApp(ctk.CTk):
+    def __init__(self):
+        super().__init__()
+        self.title("Alexa Joke Teller — Modern UI")
+        self.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
+        self.minsize(700, 420)
 
-        # Joke setup
-        self.setup_label = Label(
-            self.card,
-            text="",
-            bg="#6b6b6b",
-            fg="white",
-            font=("Segoe UI", 20),
-            wraplength=700,
-            pady=20,
-            justify="center"
-        )
-        self.setup_label.pack()
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("blue")
 
-        # Punchline
-        self.punchline_label = Label(
-            self.card,
-            text="",
-            bg="#6b6b6b",
-            fg="#f1f1f1",
-            font=("Segoe UI", 20, "italic"),
-            wraplength=700,
-            pady=20,
-            justify="center"
-        )
-        self.punchline_label.pack()
-
-        # Buttons frame
-        btn_frame = Frame(self.main_frame, bg="", highlightthickness=0)
-        btn_frame.pack(pady=20)
-
-        # Glow button style
-        self.btn_style = {
-            "width": 18,
-            "height": 2,
-            "font": ("Segoe UI", 14, "bold"),
-            "bg": "#6b6b6b",
-            "fg": "white",
-            "activebackground": "#5e5e5e",
-            "relief": "flat",
-            "bd": 0
-        }
-
-        # Buttons
-        self.tell_button = self.create_glow_button(btn_frame, "Alexa Tell Me a Joke", self.tell_joke)
-        self.tell_button.grid(row=0, column=0, padx=10, pady=10)
-
-        self.show_button = self.create_glow_button(btn_frame, "Show Punchline", self.show_punchline)
-        self.show_button.grid(row=0, column=1, padx=10, pady=10)
-        self.show_button.config(state=DISABLED)
-
-        self.next_button = self.create_glow_button(btn_frame, "Next Joke", self.tell_joke)
-        self.next_button.grid(row=1, column=0, padx=10, pady=10)
-        self.next_button.config(state=DISABLED)
-
-        self.quit_button = self.create_glow_button(btn_frame, "Quit", root.quit)
-        self.quit_button.grid(row=1, column=1, padx=10, pady=10)
-
-        # Storage
+        # STATE
+        self.jokes = load_jokes()
+        self.total = len(self.jokes)
+        self.current_index = None
+        self.revealing = False
         self.current_setup = ""
         self.current_punchline = ""
 
-    # ---------------------------
-    # Gradient Background Drawing
-    # ---------------------------
-    def draw_gradient(self, color1, color2):
-        for i in range(550):
-            r1, g1, b1 = self.hex_to_rgb(color1)
-            r2, g2, b2 = self.hex_to_rgb(color2)
-            ratio = i / 550
-            r = int(r1 + (r2 - r1) * ratio)
-            g = int(g1 + (g2 - g1) * ratio)
-            b = int(b1 + (b2 - b1) * ratio)
-            line_color = f"#{r:02x}{g:02x}{b:02x}"
-            self.canvas.create_line(0, i, 900, i, fill=line_color)
+        # UI CREATION
+        self._create_background()
+        self._create_card()
+        self._create_controls()
+        self._start_neon_animation()
+        self._card_float_animation()
+        self._show_welcome()
 
-    def hex_to_rgb(self, hex_color):
-        hex_color = hex_color.lstrip("#")
-        return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
+    # ----------------------------
+    # Background
+    # ----------------------------
+    def _create_background(self):
+        # pass width/height to constructor (required by customtkinter)
+        self.bg_top = ctk.CTkFrame(self, corner_radius=0, width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
+        self.bg_top.place(x=0, y=0)
 
-    # ---------------------------
-    # Glow Button Creator
-    # ---------------------------
-    def create_glow_button(self, parent, text, command):
-        btn = Button(parent, text=text, command=command, **self.btn_style)
+        # Decorative stripe (use hex color, not RGB tuple)
+        self.left_stripe = ctk.CTkFrame(
+            self.bg_top,
+            width=160,
+            height=WINDOW_HEIGHT - 160,
+            corner_radius=20,
+            fg_color="#282846"   # replaced tuple with hex
+        )
+        self.left_stripe.place(x=20, y=80)
 
-        # Hover effect
-        def on_enter(e):
-            btn.config(bg="#8a8a8a")
-        def on_leave(e):
-            btn.config(bg="#6b6b6b")
+    # ----------------------------
+    # Main joke card
+    # ----------------------------
+    def _create_card(self):
+        card_w = 740
+        card_h = 360
+        x = (WINDOW_WIDTH - card_w) // 2
+        y = 70
 
-        btn.bind("<Enter>", on_enter)
-        btn.bind("<Leave>", on_leave)
+        self.card = ctk.CTkFrame(
+            self,
+            corner_radius=20,
+            border_width=2,
+            border_color="#6f6cff",
+            width=card_w,
+            height=card_h
+        )
+        self.card.place(x=x, y=y)
 
-        return btn
+        self._card_base_y = y
+        self._card_float_offset = 0
+        self._card_float_dir = 1
 
-    # ---------------------------
-    # Load jokes
-    # ---------------------------
-    def load_jokes(self):
-        path = "JheiromPabloAlexaTellMeAJoke/randomJokes.txt"
-        jokes = []
+        # Title row
+        top = ctk.CTkFrame(self.card, fg_color="transparent")
+        top.pack(padx=20, pady=(16, 6), fill="x")
 
-        with open(path, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if "?" in line:
-                    setup, punchline = line.split("?", 1)
-                    jokes.append((setup + "?", punchline))
+        ctk.CTkLabel(top, text="Alexa Joke Teller", font=ctk.CTkFont(size=20, weight="bold")).pack(side="left")
 
-        return jokes
+        # mic button: use transparent fg_color and remove unsupported kwargs
+        mic = ctk.CTkButton(top, text="🎙️", width=36, height=36, corner_radius=18, fg_color="transparent", command=self._mic_pressed)
+        mic.pack(side="right")
 
-    # ---------------------------
-    # Show setup
-    # ---------------------------
+        # Joke display area - use hex color instead of tuple
+        self.joke_frame = ctk.CTkFrame(self.card, corner_radius=14, fg_color="#1e1e28")
+        self.joke_frame.pack(padx=18, pady=8, expand=True, fill="both")
+
+        self.setup_label = ctk.CTkLabel(self.joke_frame, text="", wraplength=640, justify="center", font=ctk.CTkFont(size=18))
+        self.setup_label.pack(pady=(18, 6), padx=18)
+
+        self.punch_label = ctk.CTkLabel(self.joke_frame, text="", wraplength=640, justify="center", font=ctk.CTkFont(size=18, slant="italic"))
+        self.punch_label.pack(pady=(6, 12), padx=18)
+
+        # Counter
+        bottom = ctk.CTkFrame(self.card, fg_color="transparent")
+        bottom.pack(padx=20, pady=(0, 12), fill="x")
+
+        self.counter_label = ctk.CTkLabel(bottom, text="Joke 0 / 0", font=ctk.CTkFont(size=12))
+        self.counter_label.pack(side="left")
+
+        self.spinner = ctk.CTkProgressBar(bottom, mode="indeterminate")
+        self.spinner.pack(side="right", fill="x", expand=True)
+        try:
+            self.spinner.stop()
+        except Exception:
+            pass
+
+    # ----------------------------
+    # Controls
+    # ----------------------------
+    def _create_controls(self):
+        frame = ctk.CTkFrame(self, fg_color="transparent")
+        # place without width/height (frame can be sized by contents)
+        frame.place(relx=0.5, rely=0.82, anchor="n")
+
+        self.tell_btn = ctk.CTkButton(frame, text="Alexa Tell Me a Joke", width=220, command=self.tell_joke)
+        self.tell_btn.grid(row=0, column=0, padx=12, pady=6)
+
+        self.show_btn = ctk.CTkButton(frame, text="Show Punchline", width=180, command=self.show_punchline, state="disabled")
+        self.show_btn.grid(row=0, column=1, padx=12, pady=6)
+
+        self.next_btn = ctk.CTkButton(frame, text="Next Joke", width=130, command=self.tell_joke, state="disabled")
+        self.next_btn.grid(row=0, column=2, padx=12, pady=6)
+
+        self.quit_btn = ctk.CTkButton(frame, text="Quit", width=90, command=self.destroy)
+        self.quit_btn.grid(row=0, column=3, padx=12, pady=6)
+
+    # ----------------------------
+    # Mic flash
+    # ----------------------------
+    def _mic_pressed(self):
+        original = self.card.cget("border_color")
+        # visual flash
+        self.card.configure(border_color="#ffd86b")
+        self.after(220, lambda: self.card.configure(border_color=original))
+        self.after(330, self.tell_joke)
+
+    # ----------------------------
+    # Neon animation
+    # ----------------------------
+    def _start_neon_animation(self):
+        self._neon_phase = 0
+        self._neon_dir = 1
+        self._neon_step()
+
+    def _neon_step(self):
+        phase = (self._neon_phase % 100) / 100.0
+        color_a = (111, 111, 255)
+        color_b = (96, 159, 255)
+        r = int(color_a[0] + (color_b[0] - color_a[0]) * phase)
+        g = int(color_a[1] + (color_b[1] - color_a[1]) * phase)
+        bl = int(color_a[2] + (color_b[2] - color_a[2]) * phase)
+        try:
+            self.card.configure(border_color=f"#{r:02x}{g:02x}{bl:02x}")
+        except Exception:
+            pass
+
+        self._neon_phase += self._neon_dir * 2
+        if self._neon_phase >= 100 or self._neon_phase <= 0:
+            self._neon_dir *= -1
+
+        self.after(60, self._neon_step)
+
+    # ----------------------------
+    # Floating card animation
+    # ----------------------------
+    def _card_float_animation(self):
+        self._card_float_offset += self._card_float_dir
+        if abs(self._card_float_offset) > 8:
+            self._card_float_dir *= -1
+        new_y = self._card_base_y + self._card_float_offset
+        try:
+            self.card.place_configure(y=new_y)
+        except Exception:
+            pass
+        self.after(120, self._card_float_animation)
+
+    # ----------------------------
+    # Joke Logic
+    # ----------------------------
+    def _show_welcome(self):
+        self.setup_label.configure(text="Press 'Alexa Tell Me a Joke' or tap the mic 🎙️")
+        self.punch_label.configure(text="")
+        self.counter_label.configure(text=f"Joke 0 / {self.total}")
+
     def tell_joke(self):
-        self.current_setup, self.current_punchline = random.choice(self.jokes)
-        self.setup_label.config(text=self.current_setup)
-        self.punchline_label.config(text="")
+        if not self.jokes:
+            return
 
-        self.show_button.config(state=NORMAL)
-        self.next_button.config(state=NORMAL)
+        new_index = random.randrange(len(self.jokes))
+        if self.current_index == new_index and len(self.jokes) > 1:
+            new_index = (new_index + 1) % len(self.jokes)
 
-    # ---------------------------
-    # Smooth fade-in punchline
-    # ---------------------------
+        self.current_index = new_index
+        self.current_setup, self.current_punchline = self.jokes[new_index]
+
+        self._type_setup(self.current_setup)
+        self.punch_label.configure(text="")
+
+        self.show_btn.configure(state="normal")
+        self.next_btn.configure(state="normal")
+
+        self.counter_label.configure(text=f"Joke {new_index+1} / {self.total}")
+
+    # ----------------------------
+    # Typing animations
+    # ----------------------------
+    def _type_setup(self, text):
+        self.setup_label.configure(text="")
+        self._s_idx = 0
+        self._s_text = text
+        self._type_setup_step()
+
+    def _type_setup_step(self):
+        if self._s_idx <= len(self._s_text):
+            self.setup_label.configure(text=self._s_text[:self._s_idx])
+            self._s_idx += 1
+            self.after(12, self._type_setup_step)
+
     def show_punchline(self):
-        text = self.current_punchline
-        self.punchline_label.config(text="")
+        if self.revealing:
+            return
+        self.revealing = True
+        self.show_btn.configure(state="disabled")
 
-        # Fade-in animation
-        for i in range(1, len(text) + 1):
-            self.punchline_label.config(text=text[:i])
-            self.root.update()
-            time.sleep(0.02)
+        try:
+            self.spinner.start()
+        except Exception:
+            pass
+
+        self.after(600, self._type_punchline)
+
+    def _type_punchline(self):
+        try:
+            self.spinner.stop()
+        except Exception:
+            pass
+
+        self._p_idx = 0
+        self._p_text = self.current_punchline
+        self._type_punch_step()
+
+    def _type_punch_step(self):
+        if self._p_idx <= len(self._p_text):
+            self.punch_label.configure(text=self._p_text[:self._p_idx])
+            self._p_idx += 1
+            self.after(28, self._type_punch_step)
+        else:
+            self.revealing = False
 
 
+# ----------------------------
 # Run App
+# ----------------------------
 if __name__ == "__main__":
-    root = tk.Tk()
-    JokeApp(root)
-    root.mainloop()
+    app = ImprovedJokeApp()
+    app.mainloop()

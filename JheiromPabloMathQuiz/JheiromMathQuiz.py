@@ -28,7 +28,7 @@ class MathsQuiz:
             else:
                 # fallback: try to use a bundled png name (if user supplied one)
                 if os.path.exists("math_quiz_icon.png"):
-                    icon = ImageTk.PhotoImage(file="math_quiz_icon.png")
+                    icon = ImageTk.PhotoImage(file="JheiromPabloMathQuiz/Jheirom’s Math quiz-min.png")
                 else:
                     icon = None
 
