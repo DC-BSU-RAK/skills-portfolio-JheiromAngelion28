@@ -27,7 +27,7 @@ class MathsQuiz:
                 icon = ImageTk.PhotoImage(img)
             else:
                 # fallback: try to use a bundled png name (if user supplied one)
-                if os.path.exists("math_quiz_icon.png"):
+                if os.path.exists("JheiromPabloMathQuiz/Jheirom’s Math quiz-min.png"):
                     icon = ImageTk.PhotoImage(file="JheiromPabloMathQuiz/Jheirom’s Math quiz-min.png")
                 else:
                     icon = None
