@@ -1,11 +1,4 @@
-"""
-Improved Alexa Joke Teller (Fixed for customtkinter)
----------------------------------------------------
-Requirements:
-    pip install customtkinter pillow
-Run:
-    python Alexa.py
-"""
+
 
 import os
 import random
