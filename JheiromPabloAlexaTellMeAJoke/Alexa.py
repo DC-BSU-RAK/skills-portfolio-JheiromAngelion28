@@ -39,7 +39,7 @@ def load_jokes(path=JOKES_PATH):
     return jokes
 
 # ----------------------------
-# Ultra Modern App
+# App
 # ----------------------------
 class UltraModernJokeApp(ctk.CTk):
     def __init__(self):
