@@ -44,7 +44,7 @@ class MathsQuiz:
         self.selected_operation_button = None
 
         # === Video Background (JheiromMP4 not GIF) ===
-        # Keep the video in the background; if file missing, app still works.
+        
         self.video_label = tk.Label(self.root)
         self.video_label.pack(fill="both", expand=True)
         try:
@@ -53,7 +53,7 @@ class MathsQuiz:
                 self.video_player = tkvideo(video_path, self.video_label, loop=1, size=(600, 450))
                 self.video_player.play()
             else:
-                # If video missing, just fill with background color
+                # If video missing, just fill fall back with background color
                 self.video_label.configure(bg="#2b2b2b")
         except Exception as e:
             print("Video background error:", e)
