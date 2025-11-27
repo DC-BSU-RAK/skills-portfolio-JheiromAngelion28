@@ -287,7 +287,7 @@ class StudentManagerApp:
 
     # Modern Card Functions 
     def create_student_card(self, parent, student):
-        grade_colors = {"A":"#4CAF50", "B":"#8BC34A", "C":"#FFC107", "D":"#FF9800", "F":"#F44336"}
+        grade_colors = {"A":"#4CAF50", "B":"#9FE055", "C":"#FFC107", "D":"#FF9800", "F":"#F44336"}
         card = ctk.CTkFrame(parent, corner_radius=12, border_width=1, border_color="#4D4D4D")
         card.grid_columnconfigure(0, weight=1)
         
