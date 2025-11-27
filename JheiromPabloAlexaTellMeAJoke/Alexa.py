@@ -5,9 +5,9 @@ import tkinter as tk
 from tkvideo import tkvideo
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 
-# ---------------------------------------
+
 # Window Configuration
-# ---------------------------------------
+
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 600
 
@@ -17,9 +17,9 @@ JOKES_PATH = os.path.join(BASE_DIR, "randomJokes.txt")
 VIDEO_PATH = os.path.join(BASE_DIR, "Jheirom.mp4")
 
 
-# ---------------------------------------
-# Improved GIF Loader (Rectangular + Text)
-# ---------------------------------------
+
+#  GIF Loader 
+
 class AnimatedGIF:
     def __init__(self, path, size=(250, 100)):
         self.frames = []
@@ -75,9 +75,9 @@ class AnimatedGIF:
         return frame
 
 
-# ---------------------------------------
+
 # Joke Loader
-# ---------------------------------------
+
 def load_jokes(path=JOKES_PATH):
     jokes = []
     try:
@@ -103,9 +103,8 @@ def load_jokes(path=JOKES_PATH):
     return jokes
 
 
-# ---------------------------------------
 # Main App
-# ---------------------------------------
+
 class AlexaJokeApp(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -134,9 +133,9 @@ class AlexaJokeApp(ctk.CTk):
         # Animate GIF buttons
         self.animate_buttons()
 
-    # ---------------------------------------
+ 
     # UI Layout
-    # ---------------------------------------
+   
     def _build_ui(self):
        
         # Joke setup text (question/setup)
@@ -208,9 +207,9 @@ class AlexaJokeApp(ctk.CTk):
                                       hover=False)
         self.quit_btn.place(x=main_spacing + (button_width + main_spacing) * 2 + 50, y=520)
 
-    # ---------------------------------------
+
     # Video Background
-    # ---------------------------------------
+
     def _load_video(self):
         try:
             if not os.path.exists(VIDEO_PATH):
@@ -231,9 +230,9 @@ class AlexaJokeApp(ctk.CTk):
         except Exception as e:
             print("Video Error:", e)
 
-    # ---------------------------------------
+
     # Animate Buttons
-    # ---------------------------------------
+  
     def animate_buttons(self):
         self.tell_btn.configure(image=self.btn_tell.next())
         self.show_btn.configure(image=self.btn_punch.next())
@@ -241,9 +240,9 @@ class AlexaJokeApp(ctk.CTk):
         self.quit_btn.configure(image=self.btn_quit.next())
         self.after(80, self.animate_buttons)
 
-    # ---------------------------------------
+
     # Jokes
-    # ---------------------------------------
+
     def tell_joke(self):
         self.current_joke = random.choice(self.jokes)
         setup, _ = self.current_joke
@@ -265,9 +264,9 @@ class AlexaJokeApp(ctk.CTk):
         self.destroy()
 
 
-# ---------------------------------------
+
 # Run App
-# ---------------------------------------
+
 if __name__ == "__main__":
     app = AlexaJokeApp()
     app.mainloop()
