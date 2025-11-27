@@ -159,7 +159,7 @@ class MathsQuiz:
         button_style = {
             "font": ("Arial", 12, "bold"),
             "width": 20,
-            "bg": "#0078D7",
+            "bg": "#1A8DEB",
             "fg": "white",
             "activebackground": "#005A9E",
             "cursor": "hand2",
