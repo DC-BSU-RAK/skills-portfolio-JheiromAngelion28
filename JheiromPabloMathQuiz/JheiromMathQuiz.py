@@ -181,7 +181,7 @@ class MathsQuiz:
             self.difficulty_buttons.append(btn)
 
         tk.Label(self.main_frame, text="Choose Operation Mode", font=("Arial", 13, "italic"),
-                 fg="#f0f0f0", bg="#000000").pack(pady=10)
+                 fg="#f0f0f0", bg="#0A0A0A").pack(pady=10)
 
         # Operation Buttons 
         operations = [

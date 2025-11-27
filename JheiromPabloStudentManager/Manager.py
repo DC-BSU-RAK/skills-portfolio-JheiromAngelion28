@@ -398,7 +398,7 @@ class StudentManagerApp:
                 welcome_frame, 
                 text=low_text, 
                 font=ctk.CTkFont(size=16),
-                text_color="#FF9800"
+                text_color="#F89D15"
             ).pack(pady=8)
 
     #  Actions 
