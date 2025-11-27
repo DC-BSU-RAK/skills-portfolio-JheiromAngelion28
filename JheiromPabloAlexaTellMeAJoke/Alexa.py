@@ -157,7 +157,7 @@ class AlexaJokeApp(ctk.CTk):
             self,
             text="",
             font=ctk.CTkFont(size=24, weight="bold"),
-            text_color="#90EE90",
+            text_color="#1ACF1A",
             wraplength=700,
             fg_color="#2d2d44",
             corner_radius=15,
