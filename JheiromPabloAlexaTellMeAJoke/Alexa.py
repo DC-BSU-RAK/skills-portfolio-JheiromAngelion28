@@ -138,15 +138,7 @@ class AlexaJokeApp(ctk.CTk):
     # UI Layout
     # ---------------------------------------
     def _build_ui(self):
-        # Title label
-        self.title_label = ctk.CTkLabel(
-            self,
-            text="Alexa's Joke Box",
-            font=ctk.CTkFont(size=36, weight="bold"),
-            text_color="#FFD700",
-        )
-        self.title_label.place(relx=0.5, y=40, anchor="center")
-        
+       
         # Joke setup text (question/setup)
         self.joke_text_label = ctk.CTkLabel(
             self,
@@ -157,9 +149,9 @@ class AlexaJokeApp(ctk.CTk):
             fg_color="#1a1a2e",
             corner_radius=15,
             padx=25,
-            pady=18
+            pady=19
         )
-        self.joke_text_label.place(relx=0.5, y=200, anchor="center")
+        self.joke_text_label.place(relx=0.5, y=300, anchor="center")
         
         # Punchline text (separate)
         self.punchline_label = ctk.CTkLabel(
@@ -171,7 +163,7 @@ class AlexaJokeApp(ctk.CTk):
             fg_color="#2d2d44",
             corner_radius=15,
             padx=25,
-            pady=18
+            pady=20
         )
         self.punchline_label.place(relx=0.5, y=290, anchor="center")
         self.punchline_label.place_forget()  # Hide initially
