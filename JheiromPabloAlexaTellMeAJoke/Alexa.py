@@ -4,9 +4,9 @@ import customtkinter as ctk
 import tkinter as tk
 from tkvideo import tkvideo
 
-# ----------------------------
+
 # Configuration
-# ----------------------------
+
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 600
 
@@ -17,9 +17,9 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 JOKES_PATH = os.path.join(BASE_DIR, "randomJokes.txt")
 VIDEO_PATH = os.path.join(BASE_DIR, "Jheirom.mp4")  # Your MP4 video
 
-# ----------------------------
+
 # Helpers
-# ----------------------------
+
 def load_jokes(path=JOKES_PATH):
     jokes = []
     try:
@@ -75,9 +75,9 @@ class AlexaJokeApp(ctk.CTk):
         # Load video last (behind widgets)
         self._load_video()
 
-    # ----------------------------
+   
     # Layout
-    # ----------------------------
+   
     def _build_layout(self):
         # ---- Joke Display Box ----
         joke_frame = ctk.CTkFrame(self, fg_color="transparent", width=900, height=250)
@@ -159,9 +159,9 @@ class AlexaJokeApp(ctk.CTk):
         )
         self.quit_btn.place(relx=0.5, y=info_y, anchor="center")
 
-    # ----------------------------
+   
     # Video Background
-    # ----------------------------
+   
     def _load_video(self):
         """Load MP4 video and send to background"""
         try:
@@ -186,9 +186,9 @@ class AlexaJokeApp(ctk.CTk):
         except Exception as e:
             print(f"Error loading video: {e}")
 
-    # ----------------------------
+  
     # Joke Logic
-    # ----------------------------
+   
     def tell_joke(self):
         if not self.jokes:
             return
