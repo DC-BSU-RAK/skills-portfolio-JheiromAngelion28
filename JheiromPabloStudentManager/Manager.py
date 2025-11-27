@@ -4,9 +4,9 @@ import customtkinter as ctk
 import tkinter as tk
 from tkinter import messagebox, simpledialog
 
-# -----------------------
+
 # Data classes
-# -----------------------
+
 class Student:
     def __init__(self, student_code, name, mark1, mark2, mark3, exam_mark):
         self.student_code = student_code
@@ -42,6 +42,7 @@ class Student:
     def to_file_string(self):
         return f"{self.student_code},{self.name},{self.mark1},{self.mark2},{self.mark3},{self.exam_mark}"
 
+# Linking student marks text file
 class StudentManager:
     def __init__(self, filename="JheiromPabloStudentManager/studentMarks.txt"):
         self.filename = filename
@@ -157,9 +158,9 @@ class StudentManager:
         if not self.students: return None
         return min(self.students, key=lambda x: x.overall_percentage)
 
-# -----------------------
+
 # GUI App
-# -----------------------
+
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("blue")
 

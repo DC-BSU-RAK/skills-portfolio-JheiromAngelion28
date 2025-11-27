@@ -166,7 +166,7 @@ class MathsQuiz:
             "bd": 0
         }
 
-        # --- Difficulty Buttons ---
+        # Difficulty Buttons
         difficulties = [
             ("Easy (0–9)", "easy"),
             ("Moderate (10–99)", "moderate"),

@@ -175,7 +175,7 @@ class AlexaJokeApp(ctk.CTk):
         main_spacing = (total_width - (3 * button_width)) / 4
         button_y = 400
 
-        # MAIN BUTTONS with even spacing
+        # Main buttons even spacing
         self.show_btn = ctk.CTkButton(self, fg_color="transparent",
                                       text="", image=self.btn_punch.next(),
                                       width=250, height=100,
