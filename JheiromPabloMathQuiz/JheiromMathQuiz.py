@@ -12,12 +12,10 @@ class MathsQuiz:
         self.root.geometry("600x450")
         self.root.resizable(False, False)
 
-        # === App Icon (converts JPG to PNG at runtime if needed) ===
-        # Developer provided image path inside container: /mnt/data/Jheirom’s Math quiz.jpg
-        # We'll create math_quiz_icon.png next to the script if not present
+       
         try:
-            src_jpg = "/mnt/data/Jheirom’s Math quiz.jpg"
-            icon_png = "math_quiz_icon.png"
+            src_jpg = "JheiromPabloMathQuiz/Jheirom’s Math quiz-min.png"
+            icon_png = "JheiromPabloMathQuiz/Jheirom’s Math quiz-min.png"
             if os.path.exists(icon_png):
                 icon = ImageTk.PhotoImage(file=icon_png)
             elif os.path.exists(src_jpg):
@@ -43,7 +41,7 @@ class MathsQuiz:
         self.selected_difficulty_button = None
         self.selected_operation_button = None
 
-        # === Video Background (JheiromMP4 not GIF) ===
+        # Video Background (JheiromMP4 not GIF) 
         # Keep the video in the background; if file missing, app still works.
         self.video_label = tk.Label(self.root)
         self.video_label.pack(fill="both", expand=True)
@@ -59,12 +57,12 @@ class MathsQuiz:
             print("Video background error:", e)
             self.video_label.configure(bg="#2b2b2b")
 
-        # === Overlay Frame ===
+        # Overlay Frame 
         self.main_frame = tk.Frame(self.root, bg="#000000", bd=0, highlightthickness=0)
         # place centered and a little smaller so the video shows around edges
         self.main_frame.place(relx=0.5, rely=0.5, anchor="center")
 
-        # === Quiz Variables ===
+        # Quiz Variables 
         self.difficulty = None
         self.operation_mode = "mixed"
         self.score = 0
@@ -74,7 +72,7 @@ class MathsQuiz:
         self.num1 = self.num2 = self.correct_answer = None
         self.current_operation = None
 
-        # === Timer Variables ===
+        # Timer Variables 
         self.timer_length = 15  # seconds per question
         self.timer_running = False
         self.time_left = self.timer_length
@@ -85,11 +83,10 @@ class MathsQuiz:
         # To keep track of popups (so we can explicitly close them)
         self.open_popups = []
 
-        # === Start Menu ===
+        # Start Menu
         self.displayMenu()
 
-    # ================== UI Helpers ==================
-
+    # UI Helpers 
     def clearFrame(self):
         # Destroy any widget children of main_frame
         for widget in self.main_frame.winfo_children():
@@ -147,7 +144,7 @@ class MathsQuiz:
                 except Exception:
                     pass
 
-    # ================== Main Menu ==================
+    # Main Menu
 
     def displayMenu(self):
         self.clearFrame()
@@ -186,7 +183,7 @@ class MathsQuiz:
         tk.Label(self.main_frame, text="Choose Operation Mode", font=("Arial", 13, "italic"),
                  fg="#f0f0f0", bg="#000000").pack(pady=10)
 
-        # --- Operation Buttons ---
+        # Operation Buttons 
         operations = [
             ("Addition (+)", "+"),
             ("Subtraction (−)", "-"),
@@ -228,7 +225,7 @@ class MathsQuiz:
         self.current_question = 0
         self.startQuiz()
 
-    # ================== Question Logic ==================
+    #  Question Logic 
 
     def randomInt(self):
         if self.difficulty == "easy":
@@ -262,7 +259,7 @@ class MathsQuiz:
 
         self.first_attempt = True
 
-    # ================== Quiz Display ==================
+    #  Display 
 
     def startQuiz(self):
         self.generateQuestion()
@@ -302,7 +299,7 @@ class MathsQuiz:
 
         self.startTimer()
 
-    # ================== Timer ==================
+    # Timer
 
     def startTimer(self):
         # Ensure no parallel timers
@@ -361,7 +358,7 @@ class MathsQuiz:
             self.timer_after_id = None
         self.timer_running = False
 
-    # ================== Answer Check ==================
+    # Answer Check
 
     def checkAnswer(self):
         # Prevent double submission
@@ -420,7 +417,7 @@ class MathsQuiz:
                 self.customMessage("❌ Incorrect", f"The answer was {self.correct_answer}.", "#FF0000", auto_close=2)
                 self.root.after(1200, self.nextQuestion)
 
-    # ================== Results ==================
+    # Results 
 
     def nextQuestion(self):
         # Close all popups for clean transition
@@ -476,7 +473,7 @@ class MathsQuiz:
         elif self.score >= 50: return "D"
         else: return "F"
 
-# ================== Run App ==================
+# to Run App 
 if __name__ == "__main__":
     root = tk.Tk()
     app = MathsQuiz(root)

@@ -559,13 +559,13 @@ class StudentManagerApp:
 
         self.display_students_cards(students, title=title)
 
-    # ---------------- Theme ----------------
+    # Theme
     def change_theme(self, new_mode):
         ctk.set_appearance_mode(new_mode)
 
-# -----------------------
+
 # Main
-# -----------------------
+
 def main():
     root = ctk.CTk()
     app = StudentManagerApp(root)
